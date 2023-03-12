@@ -1,11 +1,15 @@
 import unittest
 from datetime import datetime
 
-from ..engine.capulet_engine import CapuletEngine
+from engine.capulet_engine import CapuletEngine
 from engine.sternman_engine import SternmanEngine
 from engine.willoughby_engine import WilloughbyEngine
+
 from battery.nubbin_battery import NubbinBattery
 from battery.spindler_battery import SpindlerBattery
+
+from tire.carrigan_tire import CarriganTire
+from tire.octoprime_tire import OctoprimeTire
 
 #Test Batteries
 class TestSpindlerBattery(unittest.TestCase):
@@ -73,5 +77,44 @@ class TestCapuletEngine(unittest.TestCase):
         engine = CapuletEngine(current_mileage, last_service_mileage)
         self.assertFalse(engine.needs_service())
 
+#Test tire
+class TestCarriganTire(unittest.TestCase):
+    def test_needs_service_false(self):
+        print()
+        tire_ware = [0.4, 0.5, 0.2, 0.8]
+        tire = CarriganTire(tire_ware)
+        self.assertFalse(tire.needs_service())
+
+    def test_needs_service_one_tire_true(self):
+        tire_ware = [0.4, 0.9, 0.2, 0.8]
+        tire = CarriganTire(tire_ware)
+        self.assertTrue(tire.needs_service())
+    
+    def test_needs_service_two_tire_true(self):
+        tire_ware = [0.4, 0.9, 0.94, 0.8]
+        tire = CarriganTire(tire_ware)
+        self.assertTrue(tire.needs_service())
+    
+    def test_needs_service_three_tire_true(self):
+        tire_ware = [0.91, 0.92, 0.2, 0.98]
+        tire = CarriganTire(tire_ware)
+        self.assertTrue(tire.needs_service())
+    
+    def test_needs_service_all_tire_true(self):
+        tire_ware = [0.94, 0.95, 0.92, 0.98]
+        tire = CarriganTire(tire_ware)
+        self.assertTrue(tire.needs_service())
+    
+class TestOctoprimeTire(unittest.TestCase):
+    def test_needs_service_false(self):
+        tire_ware = [0.4, 0.5, 0.2, 0.8]
+        tire = OctoprimeTire(tire_ware)
+        self.assertFalse(tire.needs_service())
+
+    def test_needs_service_true(self):
+        tire_ware = [1, 1, 1, 0.8]
+        tire = OctoprimeTire(tire_ware)
+        self.assertTrue(tire.needs_service())
+    
 if __name__ == '__main__':
     unittest.main()
